@@ -1,0 +1,17 @@
+.container {
+  max-width: 600px;
+  margin: 30px auto;
+  overflow: auto;
+  min-height: 600px;
+  border: 1px solid rgb(3, 5, 7);
+  padding: 30px;
+  border-radius: 5px;
+}
+.image-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
