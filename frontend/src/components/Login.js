@@ -31,13 +31,15 @@ export default function Login(){
         loginUser(loginState.username, loginState.password).then((data)=>{
             console.log("login successful")
             assignuser()
+            console.log(loginState.username);
             window.localStorage.setItem("username", loginState.username);
           })
         console.log(user)
         console.log(loginState)
+        console.log(window.localStorage.getItem('username'))
         console.log(JSON.stringify(loginState))
         //authenticateUser(loginState);
-        if ((user !== null) ){
+        if ((window.localStorage.getItem('username') !== null) ){
             navigate("/home")
         }
     }

@@ -37,11 +37,6 @@ export default function App() {
     const getAssignments = async () => {
       const assignmentspassed = await fetchData()
       console.log(assignmentspassed)
-      var result = assignmentspassed.find(obj => {
-        return obj.name === "warren"
-      })
-      
-      console.log(result)
       setassignments(assignmentspassed)
       
     }
@@ -105,7 +100,7 @@ if (true){
      <UserContext.Provider value = {{user, setUser}} >
      <BrowserRouter>
         <Routes>
-            <Route path = "/home" element= {<HomePage/>} />
+            <Route path = "/home" element= {<HomePage passedusers={users}/>} />
             <Route path="/" element={<LoginPage/>} />
             <Route path="/signup" element={<SignupPage/>} />
         </Routes>

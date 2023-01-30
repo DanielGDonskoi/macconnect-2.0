@@ -4,11 +4,13 @@ import { useNavigate } from "react-router-dom"
 import { UserContext } from '../contexts/userContext'
 import { loginUser, logoutUser } from '../api/auth.js'
 import { MyContext } from '../App.js';
-function Navbar({title}) {
+function Navbar({title,profile}) {
     const navigate = useNavigate();
     const {user, setUser} = useContext(UserContext)
     const handleClick = () => {
+        console.log(window.localStorage.getItem('username'))
         setUser(null);
+        window.localStorage.removeItem("username");
         logoutUser();
         console.log("logged out")
         navigate("/")
