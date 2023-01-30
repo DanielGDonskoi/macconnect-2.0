@@ -1,8 +1,18 @@
 import Searchbar from "./Searchbar"
 import { useContext } from 'react';
-
+import { useNavigate } from "react-router-dom"
+import { UserContext } from '../contexts/userContext'
+import { loginUser, logoutUser } from '../api/auth.js'
 import { MyContext } from '../App.js';
 function Navbar({title}) {
+    const navigate = useNavigate();
+    const {user, setUser} = useContext(UserContext)
+    const handleClick = () => {
+        setUser(null);
+        logoutUser();
+        console.log("logged out")
+        navigate("/")
+      };
     const mine = useContext(MyContext);
     return(
     <nav className='navbar mb-12 shadow-lg bg-neutral text-neutral-content'>
@@ -23,7 +33,7 @@ function Navbar({title}) {
             <img src={null} />
             </div>
             <button type = "button" className="btn btn-sm"> Settings</button>
-            <button type="button" name="name"  value = "Logout" className="btn btn-sm">Log Out</button>
+            <button type="button" name="name"  onClick = {handleClick} value = "Logout" className="btn btn-sm">Log Out</button>
             </div>
     </nav>
     )

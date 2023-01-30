@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom"
 import { loginFields } from "../constants/formFields";
 import { UserContext } from '../contexts/userContext.js'
 import FormAction from "./FormAction";
+import { loginUser, logoutUser } from '../api/auth.js'
 import FormExtra from "./FormExtra";
 import Input from "./Input";
 
@@ -25,12 +26,18 @@ export default function Login(){
 
     const handleSubmit=(e)=>{
         e.preventDefault();
-        assignuser()
+        console.log(loginState);
+        //CURRENTLY WORKING LOGIN
+        loginUser(loginState.username, loginState.password).then((data)=>{
+            console.log("login successful")
+            assignuser()
+            window.localStorage.setItem("username", loginState.username);
+          })
         console.log(user)
         console.log(loginState)
         console.log(JSON.stringify(loginState))
         //authenticateUser(loginState);
-        if (user !== null){
+        if ((user !== null) ){
             navigate("/home")
         }
     }
