@@ -73,5 +73,37 @@ const signupFields=[
         placeholder:"Confirm Password"   
     }
 ]
+const postFields=[
+    {
+        labelText:"Name",
+        labelFor:"name",
+        id:"name",
+        name:"name",
+        type:"text",
+        autoComplete:"username",
+        isRequired:true,
+        placeholder:"Username"   
+    },
+    {
+        labelText:"Email address",
+        labelFor:"email-address",
+        id:"email-address",
+        name:"email",
+        type:"email",
+        autoComplete:"email",
+        isRequired:true,
+        placeholder:"Email address"   
+    },
+    {
+        labelText:"Password",
+        labelFor:"password",
+        id:"password",
+        name:"password",
+        type:"password",
+        autoComplete:"current-password",
+        isRequired:true,
+        placeholder:"Password"   
+    }
+]
 
-export {loginFields,signupFields}
+export {loginFields,signupFields,postFields}

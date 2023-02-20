@@ -1,4 +1,4 @@
-from .models import Profile,NewProfile;
+from .models import Profile,NewProfile,Post;
 from rest_framework import serializers
 from django.contrib.auth.models import User
 
@@ -14,3 +14,7 @@ class NewProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = NewProfile
         fields = ('pk','user','name','bio','pfp')
+class PostSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Post
+        fields = ('pk','posted_by','text','img','name','id','posted_at')

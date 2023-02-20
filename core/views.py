@@ -2,11 +2,13 @@ from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status
-from .models import Profile,NewProfile
+from .models import Profile,NewProfile, Post
 from django.contrib.auth.models import User
+import uuid
 from django.contrib.auth import authenticate
-from .serializers import ProfileSerializer,UserSerializer,NewProfileSerializer
+from .serializers import ProfileSerializer,UserSerializer,NewProfileSerializer,PostSerializer;
 from django.http import JsonResponse
+import datetime
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
@@ -88,3 +90,40 @@ def authenticate_user(request):
                 return Response(status=status.HTTP_200_OK)
             else:
                 return Response(status=status.HTTP_404_NOT_FOUND)
+@api_view(['GET', 'POST'])
+def posts_list(request):
+    if request.method == 'GET':
+        data = Post.objects.all()
+        serializer = PostSerializer(data, context={'request': request}, many=True)
+        return Response(serializer.data)
+    elif request.method == 'POST':
+        serializer = PostSerializer(data=request.data)
+        name = serializer.initial_data['name']
+        text = serializer.initial_data['text']
+        id = serializer.initial_data['id']
+        img = serializer.initial_data['img']
+        obj = NewProfile.objects.get(name = serializer.initial_data['posted_by'])
+        print(obj)
+        print(serializer.initial_data)
+        post = Post(name = name, posted_by = obj,text=text,id=id,img=img)
+        print(post)
+        post.save()
+        return Response(status=status.HTTP_201_CREATED)
+            
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+@api_view(['DELETE'])
+def posts_detail(request, pk):
+    try:
+        student = Post.objects.get(pk=pk)
+    except Post.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'PUT':
+        serializer = ProfileSerializer(student, data=request.data,context={'request': request})
+        if serializer.is_valid():
+            serializer.save()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    elif request.method == 'DELETE':
+        student.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)

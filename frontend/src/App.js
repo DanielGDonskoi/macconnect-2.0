@@ -5,11 +5,14 @@ import {
   BrowserRouter,
   Routes,
   Route,
+  redirect
 } from "react-router-dom";
 import SignupPage from './pages/Signup';
 import { createContext } from 'react';
 import LoginPage from './pages/Login';
 import HomePage from './pages/Home';
+import ProfilePage from './pages/Profile';
+import CreatePostPage from './pages/CreatePost';
 import {v4 as uuid} from 'uuid';
 import {useState,useEffect} from "react"
 import { useContext } from 'react';
@@ -18,6 +21,7 @@ import {UserContext} from './contexts/userContext.js';
 import FormExtra from "./components/FormExtra" 
 import SignupForm from "./components/SignupForm" 
 import Navbar from "./components/Navbar" 
+import PrivateRoutes from './components/PrivateRoute'
 export const MyContext = createContext();
 export default function App() {
   const test = 1;
@@ -36,14 +40,12 @@ export default function App() {
   useEffect(() => {
     const getAssignments = async () => {
       const assignmentspassed = await fetchData()
-      console.log(assignmentspassed)
       setassignments(assignmentspassed)
       
     }
     getAssignments()
     const getUsers = async () => {
       const userspassed = await fetchUsers()
-      console.log(userspassed)
       setusers(userspassed)
     }
     getUsers()
@@ -61,10 +63,8 @@ export default function App() {
     return data
   }
   const deleteassignment = async(test) => {
-    console.log(assignments)
     const found = (assignments.find(element => element.desc == 'next test user' ))
     const foundid = found.id;
-    console.log(foundid)
     await fetch(`http://localhost:8000/api/profiles/${foundid}`,{
       method:'DELETE'
     }
@@ -96,13 +96,17 @@ if (true){
     </div>
     </div>
     </div>*/
-    <div>
+    <div style = {{backgroundColor: 'rgba(111,0,58,255)'}}>
      <UserContext.Provider value = {{user, setUser}} >
      <BrowserRouter>
         <Routes>
-            <Route path = "/home" element= {<HomePage passedusers={users}/>} />
             <Route path="/" element={<LoginPage/>} />
             <Route path="/signup" element={<SignupPage/>} />
+            <Route element = {<PrivateRoutes/>}>
+            <Route path = "/profile" element= {<ProfilePage passedusers={users} />} />
+            <Route path = "/home" element= {<HomePage passedusers={users}/>} />
+            <Route path = "/createpost" element= {<CreatePostPage passedusers={users}/>} />
+            </Route>
         </Routes>
       </BrowserRouter>
       </UserContext.Provider>

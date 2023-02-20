@@ -33,18 +33,22 @@ export default function Login(){
             assignuser()
             console.log(loginState.username);
             window.localStorage.setItem("username", loginState.username);
+            navigatehome()
           })
         console.log(user)
         console.log(loginState)
         console.log(window.localStorage.getItem('username'))
         console.log(JSON.stringify(loginState))
         //authenticateUser(loginState);
-        if ((window.localStorage.getItem('username') !== null) ){
-            navigate("/home")
-        }
+        
     }
     const assignuser=(e)=>{
         setUser({username:"Dan the man"})
+    }
+    const navigatehome=(e)=>{
+        if ((window.localStorage.getItem('username') !== null) ){
+            navigate("/home")
+        }
     }
     //Handle Login API Integration here
     const authenticateUser = async(loginState) =>{

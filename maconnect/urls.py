@@ -30,6 +30,8 @@ urlpatterns = [
     re_path(r'^api/profiles/$', views.profiles_list),
     re_path(r'^api/profiles/(\d{1,9})$', views.profile_detail),
     re_path(r'^api/newprofiles/$', views.newprofiles_list),
+    re_path(r'^api/posts/$', views.posts_list),
+    path('api/posts/<uuid:pk>', views.posts_detail),
     path('signin', views.authenticate_user),
     path('api/token/access/', TokenRefreshView.as_view(), name='token_get_access'),
     path('api/token/both/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
