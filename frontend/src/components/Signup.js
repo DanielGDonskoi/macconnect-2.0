@@ -15,7 +15,7 @@ fields.forEach(field => fieldsState[field.id]='');
 
 export default function Signup(){
   const {user, setUser} = useContext(UserContext)
-  console.log(user);
+  
   let navigate = useNavigate();
   const [signupState,setSignupState]=useState(fieldsState);
 

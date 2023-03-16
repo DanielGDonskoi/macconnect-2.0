@@ -1,8 +1,10 @@
 import {Outlet, Navigate} from 'react-router-dom'
-
+import { useContext } from 'react'
+import { tokenContext } from '../contexts/tokenContext'
 const PrivateRoutes = () => {
-    let checkauth = window.localStorage.getItem('access_token')
-    let auth = !!checkauth
+    const {token} = useContext(tokenContext)
+    let checkauth = window.sessionStorage.getItem('access_token')
+    let auth = !!token
     return (
         auth ? <Outlet/> : <Navigate to="/" exact/>
     )

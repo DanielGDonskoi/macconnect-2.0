@@ -2,16 +2,33 @@ import { postFields } from "../constants/formFields";
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import {useState} from "react" 
+import {useEffect} from "react"
 import uuid from 'react-uuid';
 const CreatePost = () => {
     const navigate = useNavigate();
     let postcontent = {
     };
+    const [profiles,setprofiles] = useState([])
     const [name,setName] = useState('')
     const [text,setAssignment] = useState('')
     const [image,setImage] = useState(null)
     const ondelete1 = () =>  {
         console.log("test")
+    }
+    useEffect(() => {
+      const getprofiles = async () => {
+        const profiles = await fetchData()
+        console.log(profiles)
+        setprofiles(profiles)
+        
+      }
+      getprofiles()
+    },[])
+    const fetchData = async() => {
+      const res = await fetch(`http://localhost:8000/api/newprofiles`)
+      const data = await res.json()
+      
+      return data
     }
     const handleImageChange = (e) => {
         console.log(e.target.files[0])
@@ -19,14 +36,18 @@ const CreatePost = () => {
     }
     const onSubmit = (e) => {
         e.preventDefault()
+        const found = (profiles.find(element => element.name == window.sessionStorage.getItem('username') ))
+        const profileid = found.id;
+        console.log(profileid)
         const id = uuid()
-        const posted_by = window.localStorage.getItem('username')
+        const posted_by = window.sessionStorage.getItem('username')
         let form_data = new FormData
         form_data.append('img',image)
         form_data.append('id',id)
         form_data.append('name',name)
         form_data.append('text',text)
         form_data.append('posted_by',posted_by)
+        form_data.append('profileid',profileid)
         postcontent = {name,text,id,posted_by};
         console.log(postcontent);
         console.log(image)
@@ -43,7 +64,7 @@ const CreatePost = () => {
               setAssignment('')
               setName('')
               setImage(null)
-              navigate('/home')
+              navigate('/profile')
         //CreatePost(postcontent);
 
     }

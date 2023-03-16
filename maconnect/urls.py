@@ -33,6 +33,12 @@ urlpatterns = [
     re_path(r'^api/posts/$', views.posts_list),
     path('api/posts/<uuid:pk>', views.posts_detail),
     path('signin', views.authenticate_user),
+    path('api/posts/specific/<uuid:pk>',views.specific_post),
+    path('api/newprofiles/specific/<uuid:id>',views.profile_by_post),
+    path('api/comments/<uuid:id>',views.get_post_comments),
+    path('api/newprofiles/search/<str:name>',views.get_matching_profiles),
+    path('api/newprofiles/id/<uuid:id>',views.get_profile_by_id),
+    path('api/comments/create',views.create_comment),
     path('api/token/access/', TokenRefreshView.as_view(), name='token_get_access'),
     path('api/token/both/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/', include(router.urls))

@@ -10,6 +10,7 @@ django-cors-headers = "*"
 djangorestframework-jwt = "*"
 
 [dev-packages]
+ipykernel = "*"
 
 [requires]
 python_version = "3.10"

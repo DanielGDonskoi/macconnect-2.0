@@ -8,7 +8,7 @@ from datetime import datetime
 User = get_user_model()
 class NewProfile(models.Model):
     name = models.CharField("Name",max_length=20,default="New User")
-    id = models.UUIDField(default=uuid.uuid4)
+    id = models.UUIDField(default=uuid.uuid4,unique=True)
     user = models.OneToOneField(User,on_delete=models.CASCADE,primary_key=True)
     bio = models.TextField(blank=True)
     pfp = models.ImageField(upload_to =None,default = None)
@@ -24,6 +24,7 @@ class Post(models.Model):
     id = models.UUIDField(default=uuid.uuid4,primary_key=True)
     posted_by = models.ForeignKey(NewProfile,on_delete=models.CASCADE)
     text = models.TextField(blank=True)
+    profileid = models.UUIDField(default=uuid.uuid4, null = True, blank=True)
     img = models.ImageField(upload_to=None,default = None)
     name = models.CharField("Name",max_length=20,default= "New User")
     posted_at = models.DateTimeField(default = datetime.now())
@@ -33,6 +34,8 @@ class FriendOf(models.Model):
     recipient = models.ForeignKey(Profile,on_delete=models.CASCADE, related_name='friendship_requests_received')
 class Comment(models.Model):
     id = models.UUIDField(primary_key=True,default=uuid.uuid4)
+    postid = models.UUIDField(default=uuid.uuid4,null = True, blank = True)
+    profileid = models.UUIDField(default=uuid.uuid4, null = True, blank=True)
     #commenterid = models.ForeignKey(Profile,on_delete=models.CASCADE)
     #postid = models.ForeignKey(Post,on_delete=models.CASCADE)
     text = models.TextField(blank=True)

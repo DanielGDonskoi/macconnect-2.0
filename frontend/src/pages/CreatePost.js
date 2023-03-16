@@ -27,7 +27,7 @@ export default function CreatePostPage({passedusers}){
           setusers(userspassed)
         }
         getUsers()
-        console.log(window.localStorage.getItem('username'));
+        console.log(window.sessionStorage.getItem('username'));
       },[])
     const fetchUsers = async() => {
         const res = await fetch(`http://localhost:8000/api/users`)
@@ -48,9 +48,9 @@ export default function CreatePostPage({passedusers}){
         
         <div>
         <Navbar title = 'MacConnect' />
-        <div className="min-h-full h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <div className="h-fit flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-xl w-full space-y-10">
-        <div className="container bg-white">
+        <div className="h-fit container bg-white">
              <div>placeholder</div>
              <CreatePost/>
         </div>

@@ -13,11 +13,15 @@ import LoginPage from './pages/Login';
 import HomePage from './pages/Home';
 import ProfilePage from './pages/Profile';
 import CreatePostPage from './pages/CreatePost';
+import SearchPage from './pages/Searchresults';
+import PostPage from './pages/Post'
 import {v4 as uuid} from 'uuid';
 import {useState,useEffect} from "react"
 import { useContext } from 'react';
 import Button from '@mui/material/Button';
+import { SearchContext } from './contexts/searchContext';
 import {UserContext} from './contexts/userContext.js';
+import { tokenContext } from './contexts/tokenContext';
 import FormExtra from "./components/FormExtra" 
 import SignupForm from "./components/SignupForm" 
 import Navbar from "./components/Navbar" 
@@ -37,7 +41,10 @@ export default function App() {
   const [assignments,setassignments] = useState([])
   const [users,setusers] = useState([])
   const [user, setUser] = useState(null);
+  const [query,setQuery] = useState(null);
+  const [token,setToken] = useState(null);
   useEffect(() => {
+    setToken(token)
     const getAssignments = async () => {
       const assignmentspassed = await fetchData()
       setassignments(assignmentspassed)
@@ -97,6 +104,8 @@ if (true){
     </div>
     </div>*/
     <div style = {{backgroundColor: 'rgba(111,0,58,255)'}}>
+     <tokenContext.Provider value = {{token,setToken}} >
+     <SearchContext.Provider value = {{query,setQuery}} >
      <UserContext.Provider value = {{user, setUser}} >
      <BrowserRouter>
         <Routes>
@@ -104,12 +113,16 @@ if (true){
             <Route path="/signup" element={<SignupPage/>} />
             <Route element = {<PrivateRoutes/>}>
             <Route path = "/profile" element= {<ProfilePage passedusers={users} />} />
-            <Route path = "/home" element= {<HomePage passedusers={users}/>} />
+            <Route path = "/home" element= {<HomePage passedusers={users} passedprofiles={assignments} />} />
             <Route path = "/createpost" element= {<CreatePostPage passedusers={users}/>} />
+            <Route path = "/post" element= {<PostPage passedusers={users}/>} />
+            <Route path = "/searchpage" element = {<SearchPage/>}/>
             </Route>
         </Routes>
       </BrowserRouter>
       </UserContext.Provider>
+      </SearchContext.Provider>
+      </tokenContext.Provider>
     </div>
   );
 }

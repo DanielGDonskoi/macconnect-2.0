@@ -16,8 +16,9 @@ const loginUser = (username, password) => {
   
     return tokenRequest.post(`/api/token/both/`, loginBody)
       .then((response)=> {
-        window.localStorage.setItem(ACCESS_TOKEN, response.data.access);
-        window.localStorage.setItem(REFRESH_TOKEN, response.data.refresh);
+        window.sessionStorage.setItem(ACCESS_TOKEN, response.data.access);
+        window.sessionStorage.setItem(REFRESH_TOKEN, response.data.refresh);
+        
         return Promise.resolve(response.data);
       }).catch((error)=>{
         return Promise.reject(error);
@@ -25,10 +26,10 @@ const loginUser = (username, password) => {
   }
   
   const refreshToken = () => {
-    const refreshBody = {"refresh": window.localStorage.getItem(REFRESH_TOKEN)}
+    const refreshBody = {"refresh": window.sessionStorage.getItem(REFRESH_TOKEN)}
     return tokenRequest.post(`/api/token/access/`, refreshBody)
       .then((response)=> {
-        window.localStorage.setItem(ACCESS_TOKEN, response.data.access);
+        window.sessionStorage.setItem(ACCESS_TOKEN, response.data.access);
         return Promise.resolve(response.data);
       }).catch((error)=>{
         return Promise.reject(error);
@@ -39,26 +40,11 @@ const loginUser = (username, password) => {
     return status === 401;
   }
   
-  /*
-   * authRequest
-   *
-   * This refreshes the request and retries the token if it is invalid.
-   * This is what you use to create any requests that need the Tokens.
-   * Reference: https://hackernoon.com/110percent-complete-jwt-authentication-with-django-and-react-2020-iejq34ta
-   *
-   * Example:
-   *     authRequest.get('/path/to/endpoint/',extraParameters)
-   *        .then(response=>{
-   *          // do something with successful request
-   *        }).catch((error)=> {
-   *          // handle any errors.
-   *        });
-  */
   const authRequest = axios.create({
       baseURL: BASE_URL,
       timeout: 5000,
       headers: {
-        'Authorization': `Bearer ${window.localStorage.getItem(ACCESS_TOKEN)}`,
+        'Authorization': `Bearer ${window.sessionStorage.getItem(ACCESS_TOKEN)}`,
         'Content-Type': 'application/json',
       }
   });
@@ -74,7 +60,7 @@ const loginUser = (username, password) => {
     const status = error.response.status;
     if (isCorrectRefreshError(status)) {
       return refreshToken().then((data)=> {
-        const headerAuthorization = `Bearer ${window.localStorage.getItem(ACCESS_TOKEN)}`;
+        const headerAuthorization = `Bearer ${window.sessionStorage.getItem(ACCESS_TOKEN)}`;
         authRequest.defaults.headers['Authorization'] = headerAuthorization;
         originalRequest.headers['Authorization'] = headerAuthorization;
         return authRequest(originalRequest)
@@ -88,8 +74,9 @@ const loginUser = (username, password) => {
   }
   
   const logoutUser = () => {
-    window.localStorage.removeItem(ACCESS_TOKEN);
-    window.localStorage.removeItem(REFRESH_TOKEN);
+    window.sessionStorage.removeItem(ACCESS_TOKEN);
+    window.sessionStorage.removeItem(REFRESH_TOKEN);
+    
     authRequest.defaults.headers['Authorization'] = "";
   }
   

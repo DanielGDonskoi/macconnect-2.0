@@ -5,6 +5,7 @@ import React from 'react'
 import { useNavigate } from "react-router-dom"
 import { loginFields } from "../constants/formFields";
 import { UserContext } from '../contexts/userContext.js'
+import { tokenContext } from '../contexts/tokenContext.js';
 import FormAction from "./FormAction";
 import { loginUser, logoutUser } from '../api/auth.js'
 import FormExtra from "./FormExtra";
@@ -15,6 +16,7 @@ let fieldsState = {};
 fields.forEach(field=>fieldsState[field.id]='');
 
 export default function Login(){
+    const {token,setToken} = useContext(tokenContext)
     const navigate = useNavigate();
     const {user, setUser} = useContext(UserContext)
     const mine = useContext(MyContext);
@@ -31,13 +33,16 @@ export default function Login(){
         loginUser(loginState.username, loginState.password).then((data)=>{
             console.log("login successful")
             assignuser()
+            
             console.log(loginState.username);
-            window.localStorage.setItem("username", loginState.username);
+            window.sessionStorage.setItem("username", loginState.username);
+            window.sessionStorage.setItem("username",loginState.username)
+            setToken(true)
             navigatehome()
           })
         console.log(user)
         console.log(loginState)
-        console.log(window.localStorage.getItem('username'))
+        console.log(window.sessionStorage.getItem('username'))
         console.log(JSON.stringify(loginState))
         //authenticateUser(loginState);
         
@@ -46,7 +51,7 @@ export default function Login(){
         setUser({username:"Dan the man"})
     }
     const navigatehome=(e)=>{
-        if ((window.localStorage.getItem('username') !== null) ){
+        if ((window.sessionStorage.getItem('username') !== null) ){
             navigate("/home")
         }
     }
